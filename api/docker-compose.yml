@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  api:
+    container_name: number8-api
+    image: francescoxx/nestapp:1.0.0
+    build: .
+    env_file: .env
+    environment:
+      - PORT=3000
+      - DB_TYPE=postgres
+      - PG_USER=admin
+      - PG_PASSWORD=admin
+      - PG_DB=number8-db
+      - PG_PORT=5432
+      - PG_HOST=db
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+
+  db:
+    container_name: 'number8-db'
+    image: postgres:latest
+    env_file: .env
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: number8-db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+volumes:
+  pgdata: {}
